@@ -6,7 +6,7 @@ clear all
 x0 = [-0.19; 0.00; 0; 0];
 t0 = 0;
 % Simulation time.
-T = 10;
+T = 100;
 % Sampling time of the controller
 dt = 0.01;
 % ode function to use.
@@ -14,11 +14,13 @@ ode_func = @ode45;
 % print log for each timestep if true.
 verbose = false;
 % plot animation if true.
-plot_animation = true;
+plot_animation = false;
 % save animation to video if true.
 save_video = false;
 
-controller_handle = studentControllerInterface();
+% controller_handle = studentControllerInterface_pid();
+controller_handle = studentControllerInterface_lqr();
+% controller_handle = studentControllerInterface_lqi();
 u_saturation = 10;
 
 % Initialize traces.
