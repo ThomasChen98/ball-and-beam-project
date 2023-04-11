@@ -19,8 +19,12 @@ plot_animation = false;
 save_video = false;
 
 % controller_handle = studentControllerInterface_pid();
-controller_handle = studentControllerInterface_lqr();
+% controller_handle = studentControllerInterface_lqr();
+% controller_handle = studentControllerInterface_lqr_ekf();
 % controller_handle = studentControllerInterface_lqi();
+controller_handle = studentControllerInterface_lqi_ekf();
+% controller_handle = studentControllerInterface_IO();
+% controller_handle = studentControllerInterface_IO_ekf();
 u_saturation = 10;
 
 % Initialize traces.

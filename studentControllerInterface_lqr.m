@@ -50,8 +50,8 @@ classdef studentControllerInterface_lqr < matlab.System
             D = zeros(1, 1);
             sys = c2d(ss(A, B, C, D), obj.dt);
             % set up LQR
-            Q = diag([500,100,0.1,1]);
-            R = 1;
+            Q = diag([1000,50,1,1]);
+            R = 5;
             N = zeros(4, 1);
             % get control input
             K = lqr(sys, Q, R, N);

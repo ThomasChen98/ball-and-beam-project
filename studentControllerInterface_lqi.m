@@ -8,8 +8,8 @@ classdef studentControllerInterface_lqi < matlab.System
         last_theta = 0;
         last_p = -0.19;
         rg = 0.0254; L = 0.4255; g = 9.81; 
-%         K = 1.5; tau = 0.025;
-        K = 10; tau = 0.01;
+        K = 1.5; tau = 0.025;
+%         K = 10; tau = 0.01;
 
         dt = 0.01;
         integrator_p = 0;
@@ -38,9 +38,10 @@ classdef studentControllerInterface_lqi < matlab.System
             D = zeros(1, 1);
             sys = c2d(ss(A, B, C, D), obj.dt);
             Q = eye(5);
-            Q(1, 1) = 1000;
-%             Q(2, 2) = 10;
-            R = 1;
+            Q(1, 1) = 1;
+            Q(2, 2) = 1;
+            Q(5, 5) = 1e-2;
+            R = 5;
             N = zeros(5, 1);
 
             K = lqi(sys, Q, R, N);

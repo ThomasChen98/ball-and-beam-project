@@ -7,8 +7,8 @@ function [p_ref, v_ref, a_ref] = get_ref_traj(t)
 %       p_ref: reference position of the ball
 %       v_ref: reference velocity of the ball
 %       a_ref: reference acceleration of the ball
-    amplitude = 0.04; % m
-    period = 10; % sec
+    amplitude = 0.15; % m
+    period = 6; % sec 
     
     omega = 2 * pi / period;    
     

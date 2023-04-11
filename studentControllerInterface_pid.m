@@ -40,7 +40,7 @@ classdef studentControllerInterface_pid < matlab.System
 %             kp_p = 50;
 %             ki_p = 0.05;
 %             kd_p = 20;
-            kp_p = 15;
+            kp_p = 5;
             ki_p = 0.01;
             kd_p = 6;
             theta_d = - kp_p * error_p...

@@ -80,8 +80,10 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
             D = zeros(1, 1);
             sys = c2d(ss(A, B, C, D), obj.dt);
             Q = eye(5);
-            Q(1, 1) = 1000;
-%             Q(2, 2) = 10;
+            Q(1, 1) = 1;
+            Q(2, 2) = 1;
+            Q(3, 3) = 5;
+            Q(5, 5) = 1e-2;
             R = 1;
             N = zeros(5, 1);
 
