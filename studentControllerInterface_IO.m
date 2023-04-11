@@ -1,4 +1,4 @@
-classdef studentControllerInterface < matlab.System
+classdef studentControllerInterface_IO < matlab.System
     properties (Access = private)
         %% You can add values that you want to store and updae while running your controller.
         % For more information of the supported data type, see
@@ -44,10 +44,10 @@ classdef studentControllerInterface < matlab.System
             tau = 0.025;
             
             % control tuning parameters
-            k1 = 12;
-            k2 = 15;
-            k3 = 15;
-            k4 = 12;
+            k1 = 9;
+            k2 = 7;
+            k3 = 7;
+            k4 = 3;
             k = [k1 k2 k3 k4];
             
             % new system
@@ -60,7 +60,7 @@ classdef studentControllerInterface < matlab.System
             eps1_ref = p_ball_ref;
             eps2_ref = v_ball_ref;
             eps3_ref = a_ball_ref;
-            eps4_ref = 0;
+            eps4_ref = ((5*rg)/(7*L))*d_theta*g*cos(theta);
             
             b = -((5*rg)/(7*L))*d_theta^2*sin(theta);
             a = ((5*rg)/(7*L))*g*cos(theta);
