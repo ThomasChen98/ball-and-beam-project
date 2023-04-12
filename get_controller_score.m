@@ -1,4 +1,4 @@
-function score = get_controller_score(ts, ps, thetas, ref_ps, us)
+function score = get_controller_score(ts, ps, thetas, ref_ps, us, fid)
     if length(ts) ~= length(ps) || ...
             length(ts) ~= length(thetas) || ...
             length(ts) ~= length(ref_ps) || ...
@@ -30,4 +30,13 @@ function score = get_controller_score(ts, ps, thetas, ref_ps, us)
     fprintf('Energy Cost: %.2f \n', weight_control_efficiency * control_cost);
     fprintf('Safety Cost: %.2f \n', weight_safety * safety_cost);
     fprintf('Total Score: %.2f \n', score);
+
+    fprintf(fid, 'Average Tracking Error: %.4f \n', tracking_error);
+    fprintf(fid, 'Average Energy Consumption: %.4f \n', control_cost);
+    fprintf(fid, 'Safety Contraint Violation: %d \n', safety_cost);
+    fprintf(fid, 'Tracking Cost: %.2f \n', weight_tracking * tracking_error);
+    fprintf(fid, 'Energy Cost: %.2f \n', weight_control_efficiency * control_cost);
+    fprintf(fid, 'Safety Cost: %.2f \n', weight_safety * safety_cost);
+    fprintf(fid, 'Total Score: %.2f \n', score);
+    fprintf(fid, '\n');
 end

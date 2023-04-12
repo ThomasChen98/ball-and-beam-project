@@ -1,6 +1,19 @@
 close all
 clear all
 
+fid = fopen('output.txt', 'a+');
+
+%% 
+for input_type = 0:1
+    if input_type == 0
+        amplitude_list = [0.02 0.06 0.10];
+    else
+        amplitude_list = [0.05 0.10 0.15];
+    end
+    period_list = 6:10;
+    for amplitude = amplitude_list
+        for period = period_list
+
 %% General Settings.
 % Initial state.
 x0 = [-0.19; 0.00; 0; 0];
@@ -22,7 +35,7 @@ save_video = false;
 % controller_handle = studentControllerInterface_lqr();
 % controller_handle = studentControllerInterface_lqr_ekf();
 % controller_handle = studentControllerInterface_lqi();
-controller_handle = studentControllerInterface_lqi_ekf();
+controller_handle = studentControllerInterface_lqi_ekf(input_type, amplitude, period, fid);
 % controller_handle = studentControllerInterface_IO();
 % controller_handle = studentControllerInterface_IO_ekf();
 u_saturation = 10;
@@ -32,7 +45,7 @@ xs = x0;
 ts = t0;
 us = [];
 theta_ds = [];
-[p_ball_ref, v_ball_ref] = get_ref_traj(t0);
+[p_ball_ref, v_ball_ref] = get_ref_traj(t0, input_type, amplitude, period);
 ref_ps = p_ball_ref;
 ref_vs = v_ball_ref;
 
@@ -68,7 +81,7 @@ while ~end_simulation
     %% Record traces.
     xs = [xs, x];
     ts = [ts, t];
-    [p_ball_ref, v_ball_ref] = get_ref_traj(t);
+    [p_ball_ref, v_ball_ref] = get_ref_traj(t, input_type, amplitude, period);
     ref_ps = [ref_ps, p_ball_ref];
     ref_vs = [ref_vs, v_ball_ref];    
 end % end of the main while loop
@@ -85,19 +98,26 @@ ps = xs(1, :);
 thetas = xs(3, :);
 
 % Evaluate the score of the controller.
-score = get_controller_score(ts, ps, thetas, ref_ps, us);
+score = get_controller_score(ts, ps, thetas, ref_ps, us, fid);
 
 %% Plots
-% Plot states.
-plot_states(ts, xs, ref_ps, ref_vs, theta_ds);
-% Plot output errors.
-plot_tracking_errors(ts, ps, ref_ps);        
-% Plot control input history.
-plot_controls(ts, us);
+% % Plot states.
+% plot_states(ts, xs, ref_ps, ref_vs, theta_ds);
+% % Plot output errors.
+% plot_tracking_errors(ts, ps, ref_ps);        
+% % Plot control input history.
+% plot_controls(ts, us);
 
 if plot_animation
     animate_ball_and_beam(ts, ps, thetas, ref_ps, save_video);
 end
+
+        close all
+        clearvars -except input_type amplitude period amplitude_list period_list fid
+        end
+    end
+end
+fclose(fid);
 
 function print_log(t, x, u)
         fprintf('t: %.3f, \t x: ', t);

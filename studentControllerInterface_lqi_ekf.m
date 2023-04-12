@@ -14,6 +14,10 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
         dt = 0.01;
         integrator_p = 0;
 
+        input_type = 0;
+        amplitude = 0.06;
+        period = 6;
+
         %% For EKF
         u_prev = 0;
         xm_prev = [-0.19; 0.00; 0; 0];
@@ -25,6 +29,15 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
         svv = diag([.1/100,.1/100,1*pi/180,1*pi/180]); % From noise settings
         sww = diag([.3/100,2*pi/180]);
 
+    end
+    methods(Access = public)
+        function obj = studentControllerInterface_lqi_ekf(input_type, amplitude, period, fid);
+            fprintf("Using LQI with KF. \nInput_type %d\tAmplitude %1.2f\t Period %d\n", input_type, amplitude, period);
+            fprintf(fid, "Using LQI with KF. \nInput_type %d\tAmplitude %1.2f\t Period %d\n", input_type, amplitude, period);
+            obj.input_type = input_type;
+            obj.amplitude = amplitude;
+            obj.period = period;
+        end
     end
     methods(Access = protected)
         function setupImpl(obj)
@@ -62,7 +75,7 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
             Pm = (eye(4) - K_ekf*obj.H)*Pp;
 
             %% LQI
-            [p_ball_ref, v_ball_ref, a_ball_ref] = get_ref_traj(t);
+            [p_ball_ref, v_ball_ref, a_ball_ref] = get_ref_traj(t, obj.input_type, obj.amplitude, obj.period);
 
             v_ball = (p_ball - obj.last_p) / (t - obj.t_prev);
             dtheta = (theta - obj.last_theta) / (t - obj.t_prev);
@@ -80,11 +93,8 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
             D = zeros(1, 1);
             sys = c2d(ss(A, B, C, D), obj.dt);
             Q = eye(5);
-            Q(1, 1) = 1;
-            Q(2, 2) = 1;
-            Q(3, 3) = 5;
-            Q(5, 5) = 1e-2;
-            R = 1;
+            Q = diag([300 1 100 1 1e-3]);
+            R = 0.01;
             N = zeros(5, 1);
 
             K = lqi(sys, Q, R, N);
@@ -104,45 +114,6 @@ classdef studentControllerInterface_lqi_ekf < matlab.System
             obj.u_prev = V_servo;
         
         end
-
-%         function V_servo = stepImpl(obj, t, p_ball, theta)
-%         % This is the main function called every iteration. You have to implement
-%         % the controller in this function, bu you are not allowed to
-%         % change the signature of this function. 
-%         % Input arguments:
-%         %   t: current time
-%         %   p_ball: position of the ball provided by the ball position sensor (m)
-%         %
-%         %   theta: servo motor angle provided by the encoder of the motor (rad)
-%         % Output:
-%         %   V_servo: voltage to the servo input.        
-%             %% Sample Controller: Simple Proportional Controller
-%             t_prev = obj.t_prev;
-%             % Extract reference trajectory at the current timestep.
-%             [p_ball_ref, v_ball_ref, a_ball_ref] = get_ref_traj(t);
-%             % Decide desired servo angle based on simple proportional feedback. 
-%             k_p = 3;
-%             theta_d = - k_p * (p_ball - p_ball_ref);
-% 
-%             % Make sure that the desired servo angle does not exceed the physical
-%             % limit. This part of code is not necessary but highly recommended
-%             % because it addresses the actual physical limit of the servo motor.
-%             theta_saturation = 56 * pi / 180;    
-%             theta_d = min(theta_d, theta_saturation);
-%             theta_d = max(theta_d, -theta_saturation);
-% 
-%             % Simple position control to control servo angle to the desired
-%             % position.
-%             k_servo = 10;
-%             V_servo = k_servo * (theta_d - theta);
-%             
-%             % Update class properties if necessary.
-%             obj.t_prev = t;
-%             obj.theta_d = theta_d;
-% 
-%             obj.last_theta = theta;
-%             obj.last_p = p_ball;
-%         end
     end
     
     methods(Access = public)
