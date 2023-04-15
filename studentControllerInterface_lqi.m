@@ -37,11 +37,8 @@ classdef studentControllerInterface_lqi < matlab.System
             C = [1, 0, 0, 0];
             D = zeros(1, 1);
             sys = c2d(ss(A, B, C, D), obj.dt);
-            Q = eye(5);
-            Q(1, 1) = 1;
-            Q(2, 2) = 1;
-            Q(5, 5) = 1e-2;
-            R = 5;
+            Q = diag([300 1 100 1 1e-3]);
+            R = 0.01;
             N = zeros(5, 1);
 
             K = lqi(sys, Q, R, N);

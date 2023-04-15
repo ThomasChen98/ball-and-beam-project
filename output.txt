@@ -1,0 +1,4 @@
+Using IO with KF. 
+Input_type 0	Amplitude 0.10	 Period 6
+Using IO with KF. 
+Input_type 1	Amplitude 0.15	 Period 6

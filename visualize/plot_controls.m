@@ -13,3 +13,4 @@ ylabel('$u$ [V]');
 xlabel('$t$ [sec]');
 grid on;    
 title('Control Input History');
+saveas(gca, './plots/controls','epsc');

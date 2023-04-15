@@ -6,7 +6,7 @@ clear all
 x0 = [-0.19; 0.00; 0; 0];
 t0 = 0;
 % Simulation time.
-T = 100;
+T = 40;
 % Sampling time of the controller
 dt = 0.01;
 % ode function to use.
@@ -20,12 +20,13 @@ save_video = false;
 % Noise is on if true.
 hasnoise = true;
 
-controller_handle = studentControllerInterface_lqr_ekf();
+controller_handle = studentControllerInterface_lqi_ekf();
+% controller_handle = studentControllerInterface_IO_ekf();
 u_saturation = 10;
 
 % Noise setting
-x_sig = [.1/100,.1/100,1*pi/180,1*pi/180];
-w_sig = [.3/100,2*pi/180];
+x_sig = [.05/100,.05/100,.5*pi/180,.5*pi/180];
+w_sig = [.1/100,1*pi/180];
 
 % Initialize traces.
 xs = x0;
@@ -108,9 +109,10 @@ score = get_controller_score(ts, ps, thetas, ref_ps, us);
 % Plot states.
 plot_states(ts, xs, ref_ps, ref_vs, theta_ds);
 % Plot output errors.
-plot_tracking_errors(ts, ps, ref_ps);        
+% plot_tracking_errors(ts, ps, ref_ps);        
 % Plot control input history.
-plot_controls(ts, us);
+% plot_controls(ts, us);
+plot_errors_and_controls(ts,us,ps,ref_ps);
 
 if plot_animation
     animate_ball_and_beam(ts, ps, thetas, ref_ps, save_video);

@@ -44,10 +44,10 @@ classdef studentControllerInterface_IO < matlab.System
             tau = 0.025;
             
             % control tuning parameters
-            k1 = 8.81;
-            k2 = 7.64;
-            k3 = 6.24;
-            k4 = 1.92;
+            k1 = 4.5;
+            k2 = 7;
+            k3 = 6;
+            k4 = 2;
             k = [k1 k2 k3 k4];
             
             % new system

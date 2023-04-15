@@ -13,3 +13,4 @@ ylabel('$|z-z_r|$ [cm]');
 xlabel('$t$ [sec]', 'Interpreter', 'latex');
 grid on;
 title('Output error');
+saveas(gca, './plots/tracking_errors','epsc');
